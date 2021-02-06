@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:rel="stylesheet" rel="stylesheet" href="../static/bootstrap.css" th:href="@{/bootstrap.css}">
+</head>
+<body>
+<h1>Enter absence</h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <form action="#" th:action="@{/absences/update/{id}(id=${absence.absence_id})}" th:object="${absence}" method="post">
+                        <div class="row">
+                            <div class="col-md-4"><label class="float-right"><b>Absence type</b></label></div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <select class="form-control" id="absenceType" name="absenceType" th:field="*{absenceType}">
+
+                                        <option th:each="type : ${types}"
+                                                th:value="${type.name}"
+                                                th:text="${type.name}"
+                                        />
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label class="float-right"><b>Start</b></label></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" id="start" autocomplete="off" th:field="*{absence_start}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label class="float-right"><b>End</b></label></div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="date" class="form-control" id="end" autocomplete="off" th:field="*{absence_end}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"><label class="float-right"><b>Comment</b> max 500 characters</label></div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" th:field="*{comment}"></input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-8">
+                                <button type="submit" class="btn btn-primary mb-2">Update absence</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:rel="stylesheet" rel="stylesheet" href="../static/bootstrap.css" th:href="@{/bootstrap.css}">
+</head>
+<body>
+<h1>Listing absences</h1>
+<div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>start</td>
+                <td>end</td>
+                <td>Total days</td>
+                <td>types</td>
+                <td>status</td>
+                <td>comment</td>
+                <td>Employee Name</td>
+                <td>Edit/Delete</td>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="absence : ${absences}">
+            <td th:text="${absence.absence_id}"></td>
+            <td th:text="${absence.absence_start}"></td>
+            <td th:text="${absence.absence_end}"></td>
+            <td th:text="${absence.total_days}"></td>
+            <td th:text="${absence.absenceType}"></td>
+            <td th:text="${absence.status}"></td>
+            <td th:text="${absence.comment}"></td>
+            <td th:text="${absence.employee.fname}"></td>
+            <td>
+                <a th:href="@{/absences/edit/{id}(id=${absence.absence_id}) }" class="btn btn-primary">Edit</a>
+                <a th:href="@{/absences/delete/{id}(id=${absence.absence_id}) }" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

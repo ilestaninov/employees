@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add employee</title>
+    <link th:rel="stylesheet" rel="stylesheet" href="../static/bootstrap.css" th:href="@{/bootstrap.css}">
+</head>
+<body>
+<h1>Add employee</h1>
+<div class="container">
+    <form method="post" th:action="@{/employees/add-employee}" th:object="${employee}" >
+        <div class="row">
+            <label>First name</label>
+            <input type="text" class="form-control" th:field="*{fname}" >
+        </div>
+        <div class="row">
+            <label>Last name</label>
+            <input type="text" class="form-control" th:field="*{lname}" >
+        </div>
+       <div class="row">
+           <label>Date of birth</label>
+           <input type="date" class="form-control" th:field="*{birthday}" >
+       </div>
+        <div class="row">
+            <label>Email</label>
+            <input type="text" class="form-control" th:field="*{email}" >
+        </div>
+       <div class="row">
+           <label>Salary</label>
+           <input type="number" class="form-control" th:field="*{salary}" >
+       </div>
+        <div class="row">
+            <label>Position</label>
+            <input type="text" class="form-control" th:field="*{position}" >
+        </div>
+       <div class="row">
+           <label>Password</label>
+           <input type="password" class="form-control" th:field="*{password}" >
+       </div>
+       <div class="row">
+           <label>Confirm Password</label>
+           <input type="password" class="form-control" th:field="*{password_conf}" >
+       </div>
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+</div>
+</body>
+</html>

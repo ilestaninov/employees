@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:rel="stylesheet" rel="stylesheet" href="../static/bootstrap.css" th:href="@{/bootstrap.css}">
+</head>
+<body>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Birthday</td>
+            <td>Email</td>
+            <td>Salary</td>
+            <td>Position</td>
+            <td>Password</td>
+            <td>Confirmed password</td>
+        </tr>
+    </thead>
+    <tr th:each="employee : ${employees}">
+        <td th:text="${employee.employee_id}"></td>
+        <td th:text="${employee.fname}"></td>
+        <td th:text="${employee.lname}"></td>
+        <td th:text="${employee.birthday}"></td>
+        <td th:text="${employee.email}"></td>
+        <td th:text="${employee.salary}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.password}"></td>
+        <td th:text="${employee.password_conf}"></td>
+    </tr>
+</table>
+</body>
+</html>
