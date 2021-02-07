@@ -1,24 +1,29 @@
 package thymealeaf.demo.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import thymealeaf.demo.DTO.VacationConverter;
+import thymealeaf.demo.DTO.VacationDto;
 import thymealeaf.demo.enums.AbsenceType;
 import thymealeaf.demo.enums.VacationStatus;
 import thymealeaf.demo.helpers.Helpers;
 import thymealeaf.demo.model.Absence;
 import thymealeaf.demo.model.Employee;
+import thymealeaf.demo.model.TestVacation;
 import thymealeaf.demo.model.Vacation;
 import thymealeaf.demo.repository.EmployeeRepository;
 import thymealeaf.demo.repository.VacationRepository;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -27,6 +32,7 @@ import java.util.Optional;
 public class VacationController {
     private VacationRepository vacationRepository;
     private EmployeeRepository employeeRepository;
+    private VacationConverter vacationConverter;
     private Helpers helpers;
     @GetMapping("/form")
     public String showForm(Vacation vacation, Model model){
@@ -38,6 +44,36 @@ public class VacationController {
     public String listVacation(Model model, @Valid Vacation vacation){
         model.addAttribute("vacations", vacationRepository.findAll());
         return "list-vacations";
+    }
+    @GetMapping("/calendar")
+    public String returnCalendar(Model model){
+        return "static-calendar";
+    }
+    @GetMapping("/calendar/list-vacations")
+    @ResponseBody // is not working without responsebody (json)
+    public String allVacationsForEmployee(){
+
+        String jsonMsg = null;
+        try {
+            List<Vacation> vacations = vacationRepository.findAll();
+            List<VacationDto> result = vacationConverter.entityToDto(vacations);
+            /*Optional<Vacation> vacationById =   vacationRepository.findById(1L);
+            VacationDto result = vacationConverter.entityToDto(vacationById.get());
+           List<TestVacation> vacations = new ArrayList<>();
+           TestVacation testVacation = new TestVacation();
+           testVacation.setStart("2021-02-20");
+            testVacation.setEnd("2021-02-21");
+            testVacation.setTitle("Title");
+            vacations.add(testVacation);*/
+            ObjectMapper objectMapper = new ObjectMapper();
+            jsonMsg = objectMapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+            System.out.println("Enter catch");
+            e.printStackTrace();
+        }
+        System.out.println(jsonMsg);
+        //model.addAttribute("vacation",vacationRepository.findById(1L));
+        return jsonMsg;
     }
     @PostMapping("add-vacation")
     public String addVacation(Model model, /*@Valid*/  Vacation vacation, BindingResult result) throws IOException {
