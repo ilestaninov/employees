@@ -41,28 +41,25 @@
                 right: 'dayGridMonth'
             },
             eventLimit: true, // allow "more" link when too many events
-            events: {
-                url: '/vacations/calendar/list-vacations',
-                type:'GET',
-                error: function () {
-                    alert("There was an error")
-                }
-            }
-            /*events: [
+            eventSources:[
                 {
-                    title: 'Meeting',
-                    start: '2021-02-12T14:30:00',
-                    extendedProps: {
-                        status: 'done'
+                    url: '/calendar/list-vacations',
+                    type:'GET',
+                    color:'green',
+                    error: function () {
+                        alert("There was an error")
                     }
                 },
                 {
-                    title: 'Birthday Party',
-                    start: '2021-02-13T07:00:00',
-                    backgroundColor: 'green',
-                    borderColor: 'green'
+                    url: '/calendar/list-absences',
+                    type:'GET',
+                    color:'blue',
+                    error: function () {
+                        alert("There was an error")
+                    }
                 }
-            ]*/
+
+            ]
         });
         calendar.render();
     })

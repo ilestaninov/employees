@@ -32,7 +32,6 @@ import java.util.Optional;
 public class VacationController {
     private VacationRepository vacationRepository;
     private EmployeeRepository employeeRepository;
-    private VacationConverter vacationConverter;
     private Helpers helpers;
     @GetMapping("/form")
     public String showForm(Vacation vacation, Model model){
@@ -45,36 +44,7 @@ public class VacationController {
         model.addAttribute("vacations", vacationRepository.findAll());
         return "list-vacations";
     }
-    @GetMapping("/calendar")
-    public String returnCalendar(Model model){
-        return "static-calendar";
-    }
-    @GetMapping("/calendar/list-vacations")
-    @ResponseBody // is not working without responsebody (json)
-    public String allVacationsForEmployee(){
 
-        String jsonMsg = null;
-        try {
-            List<Vacation> vacations = vacationRepository.findAll();
-            List<VacationDto> result = vacationConverter.entityToDto(vacations);
-            /*Optional<Vacation> vacationById =   vacationRepository.findById(1L);
-            VacationDto result = vacationConverter.entityToDto(vacationById.get());
-           List<TestVacation> vacations = new ArrayList<>();
-           TestVacation testVacation = new TestVacation();
-           testVacation.setStart("2021-02-20");
-            testVacation.setEnd("2021-02-21");
-            testVacation.setTitle("Title");
-            vacations.add(testVacation);*/
-            ObjectMapper objectMapper = new ObjectMapper();
-            jsonMsg = objectMapper.writeValueAsString(result);
-        } catch (JsonProcessingException e) {
-            System.out.println("Enter catch");
-            e.printStackTrace();
-        }
-        System.out.println(jsonMsg);
-        //model.addAttribute("vacation",vacationRepository.findById(1L));
-        return jsonMsg;
-    }
     @PostMapping("add-vacation")
     public String addVacation(Model model, /*@Valid*/  Vacation vacation, BindingResult result) throws IOException {
         if(result.hasErrors()){
