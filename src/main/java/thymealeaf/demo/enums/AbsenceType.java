@@ -1,7 +1,10 @@
 package thymealeaf.demo.enums;
 
 public enum AbsenceType {
-    AnnualLeave("AnnualLeave"), CompanyHolidays("CompanyHolidays");
+    ANNUAL_LEAVE("Annual Leave"), COMPANY_HOLIDAYS("Company Holidays"),
+    BLOOD_DONATION("Blood Donation"), HOURS_OFF("Hours off"), MARRIAGE("Marriage"),
+    MATERNITY_LEAVE("Maternity Leave"), REMOTE_WORK("Remote Work"), SICK_LEAVE("Sick Leave"),
+    UNIVERSITY("University");
 
     private final String name;
 

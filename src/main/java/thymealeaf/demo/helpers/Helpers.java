@@ -8,6 +8,9 @@ import java.util.Date;
 public class Helpers {
 
     public int getDifferenceDays(Date d1, Date d2) {
+        if(d1.equals(d2)){
+            return 1;
+        }
         int daysdiff = 0;
         long diff = d2.getTime() - d1.getTime();
         long diffDays = diff / (24 * 60 * 60 * 1000);

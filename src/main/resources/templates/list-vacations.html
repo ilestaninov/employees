@@ -25,8 +25,8 @@
         <tbody>
         <tr th:each="vacation : ${vacations}">
             <td th:text="${vacation.vacation_id}"></td>
-            <td th:text="${vacation.vacation_start}"></td>
-            <td th:text="${vacation.vacation_end}"></td>
+            <td th:text="${#dates.format(vacation.vacation_start,'dd-MM-yyyy')}"></td>
+            <td th:text="${#dates.format(vacation.vacation_end,'dd-MM-yyyy')}"></td>
             <td th:text="${vacation.total_days}"></td>
             <td th:text="${vacation.status}"></td>
             <td th:text="${vacation.comment}"></td>
