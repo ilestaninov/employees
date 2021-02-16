@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import thymealeaf.demo.DTO.AbsenceConverter;
 import thymealeaf.demo.DTO.AbsenceDto;
 import thymealeaf.demo.DTO.VacationConverter;
@@ -90,7 +87,8 @@ public class CalendarController {
             System.out.println(result.getAllErrors());
             model.addAttribute("types", AbsenceType.values());
             model.addAttribute("absence",absence);
-            return "add-absence";
+            model.addAttribute("message","Start  date cannot be less than end date");
+            return "redirect:/calendar";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security
         absence.setEmployee(employeeById.get()); // Set the object to the many-to-one
@@ -111,6 +109,24 @@ public class CalendarController {
         int differenceDays = helpers.getDifferenceDays(vacation.getVacation_start(), vacation.getVacation_end());
         vacation.setTotal_days(differenceDays);
         vacationRepository.save(vacation);
+        return "redirect:/calendar";
+    }
+    @DeleteMapping("delete/{id}")
+    public String deleteAbsence(@PathVariable("id") Long id, Model model){
+        Optional<Absence> absenceToDelete = absenceRepository.findById(id);
+        if(!absenceToDelete.isPresent()){
+            return "list-absences";
+        }
+        absenceRepository.delete(absenceToDelete.get());
+        return "redirect:/calendar";
+    }
+    @DeleteMapping("/vacation/delete/{id}")
+    public String deleteVacation(@PathVariable("id") Long id, Model model){
+        Optional<Vacation> vacation = vacationRepository.findById(id);
+        if(!vacation.isPresent()){
+            return "list-vacations";
+        }
+        vacationRepository.delete(vacation.get());
         return "redirect:/calendar";
     }
 }
