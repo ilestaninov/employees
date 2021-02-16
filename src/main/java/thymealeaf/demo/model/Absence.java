@@ -6,13 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import thymealeaf.demo.enums.AbsenceType;
-import thymealeaf.demo.enums.Status;
 import thymealeaf.demo.enums.VacationStatus;
+import thymealeaf.demo.validation.DateRange;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -20,6 +17,12 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
+
+@DateRange.List({
+        @DateRange(absence_start = "absence_start",
+                absence_end = "absence_end",
+                message = "Start date should be earlier than end date.")
+})
 public class Absence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

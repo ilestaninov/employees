@@ -23,6 +23,7 @@ import thymealeaf.demo.repository.AbsenceRepository;
 import thymealeaf.demo.repository.EmployeeRepository;
 import thymealeaf.demo.repository.VacationRepository;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -84,9 +85,11 @@ public class CalendarController {
         return jsonMsg;
     }
     @PostMapping("add-absence")
-    public String addAbsence(Model model, /*@Valid*/  Absence absence, BindingResult result) throws IOException {
+    public String addAbsence(Model model, @Valid Absence absence, BindingResult result) throws IOException {
         if(result.hasErrors()){
             System.out.println(result.getAllErrors());
+            model.addAttribute("types", AbsenceType.values());
+            model.addAttribute("absence",absence);
             return "add-absence";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security
@@ -97,9 +100,10 @@ public class CalendarController {
         return "redirect:/calendar";
     }
     @PostMapping("add-vacation")
-    public String addVacation(Model model, /*@Valid*/  Vacation vacation, BindingResult result) throws IOException {
+    public String addVacation(Model model, @Valid Vacation vacation, BindingResult result) throws IOException {
         if(result.hasErrors()){
             System.out.println(result.getAllErrors());
+            model.addAttribute("vacation",vacation);
             return "add-vacation";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security

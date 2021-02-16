@@ -22,6 +22,9 @@
         </tr>
     </thead>
     <tr th:each="employee : ${employees}">
+        <!--<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}">
+            Incorrect password
+        </p>-->
         <td th:text="${employee.employee_id}"></td>
         <td th:text="${employee.fname}"></td>
         <td th:text="${employee.lname}"></td>

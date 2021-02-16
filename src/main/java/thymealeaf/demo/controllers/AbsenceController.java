@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import thymealeaf.demo.enums.AbsenceType;
+import thymealeaf.demo.enums.VacationStatus;
 import thymealeaf.demo.helpers.Helpers;
 import thymealeaf.demo.model.Absence;
 import thymealeaf.demo.model.Employee;
@@ -40,15 +41,18 @@ public class AbsenceController {
         return "add-absence";
     }
     @GetMapping("list-absences")
-    public String listAbsences(Model model, @Valid Absence absence){
+    public String listAbsences(Model model,  Absence absence){ //@Valid
 
         model.addAttribute("absences", absenceRepository.findAll());
         return "list-absences";
     }
     @PostMapping("add-absence")
-    public String addAbsence(Model model, /*@Valid*/  Absence absence, BindingResult result) throws IOException {
+    public String addAbsence(Model model, @Valid Absence absence, BindingResult result) throws IOException {
         if(result.hasErrors()){
+            System.out.println("ERRORS INSIDE ADD ABSENCE HAS ERRORS");
             System.out.println(result.getAllErrors());
+            model.addAttribute("types", AbsenceType.values());
+            model.addAttribute("absence",absence);
             return "add-absence";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security
@@ -69,9 +73,11 @@ public class AbsenceController {
         return "update-absence";
     }
     @PostMapping("update/{id}")
-    public String updateAbsence(@PathVariable("id") Long id, Absence absence, BindingResult bindingResult, Model model){
+    public String updateAbsence(@PathVariable("id") Long id,@Valid Absence absence, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             absence.setAbsence_id(id);
+            model.addAttribute("types", AbsenceType.values());
+            model.addAttribute("absence",absence);
             return "update-absence";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); // The user will be taken from spring security
@@ -79,6 +85,7 @@ public class AbsenceController {
         absence.setAbsence_id(id); // Must set the same id in order to execute a PUT Request, otherwise will create
         int differenceDays = helpers.getDifferenceDays(absence.getAbsence_start(), absence.getAbsence_end());
         absence.setTotal_days(differenceDays);
+        absence.setStatus(VacationStatus.PENDING); //when approved by admin if the user wants to make a update again again is set to pending.
         absenceRepository.save(absence);
         model.addAttribute("absences",absenceRepository.findAll());
         return "redirect:/absences/list-absences";

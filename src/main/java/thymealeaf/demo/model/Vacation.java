@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import thymealeaf.demo.enums.VacationStatus;
+import thymealeaf.demo.enums.VacationType;
+import thymealeaf.demo.validation.DateRange;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +18,11 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@DateRange.List({
+        @DateRange(absence_start = "vacation_start",
+                absence_end = "vacation_end",
+                message = "Start date should be earlier than end date.")
+})
 public class Vacation {
 
     @Id
@@ -30,6 +37,8 @@ public class Vacation {
 
     @Enumerated(EnumType.STRING)
     private VacationStatus status = VacationStatus.PENDING;
+    /*@Enumerated(EnumType.STRING)
+    private VacationType type;*/
     private String comment;
 
     @ManyToOne

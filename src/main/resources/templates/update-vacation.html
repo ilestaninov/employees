@@ -15,7 +15,9 @@
             <div class="card">
                 <div class="card-body">
                     <form action="#" th:action="@{/vacations/update/{id}(id=${vacation.vacation_id})}" th:object="${vacation}" method="post">
-
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                        </div>
                         <div class="row">
                             <div class="col-md-4"><label class="float-right"><b>Start</b></label></div>
                             <div class="col-md-4">

@@ -10,9 +10,14 @@
 <h1>Add employee</h1>
 <div class="container">
     <form method="post" th:action="@{/employees/add-employee}" th:object="${employee}" >
+
+        <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+            <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+        </div>
         <div class="row">
-            <label>First name</label>
+            <label th:for="fname">First name</label>
             <input type="text" class="form-control" th:field="*{fname}" >
+            <span th:errors="*{fname}" class="error"></span>
         </div>
         <div class="row">
             <label>Last name</label>
@@ -42,7 +47,9 @@
            <label>Confirm Password</label>
            <input type="password" class="form-control" th:field="*{password_conf}" >
        </div>
-        <input type="submit" class="btn btn-primary" value="Submit">
+        <div class="row">
+            <input type="submit" class="btn btn-primary mt-2" value="Submit">
+        </div>
     </form>
 </div>
 </body>

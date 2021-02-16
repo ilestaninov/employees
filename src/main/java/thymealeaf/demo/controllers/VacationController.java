@@ -40,15 +40,16 @@ public class VacationController {
         return "add-vacation";
     }
     @GetMapping("list-vacations")
-    public String listVacation(Model model, @Valid Vacation vacation){
+    public String listVacation(Model model, Vacation vacation){
         model.addAttribute("vacations", vacationRepository.findAll());
         return "list-vacations";
     }
 
     @PostMapping("add-vacation")
-    public String addVacation(Model model, /*@Valid*/  Vacation vacation, BindingResult result) throws IOException {
+    public String addVacation(Model model, @Valid Vacation vacation, BindingResult result) throws IOException {
         if(result.hasErrors()){
             System.out.println(result.getAllErrors());
+            model.addAttribute("vacation",vacation);
             return "add-vacation";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security
@@ -69,9 +70,10 @@ public class VacationController {
         return "update-vacation";
     }
     @PostMapping("update/{id}")
-    public String updateVacation(@PathVariable("id") Long id, Vacation vacation, BindingResult bindingResult, Model model){
+    public String updateVacation(@PathVariable("id") Long id,@Valid Vacation vacation, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             vacation.setVacation_id(id);
+            model.addAttribute("vacation",vacation);
             return "update-vacation";
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); // The user will be taken from spring security
@@ -79,6 +81,7 @@ public class VacationController {
         vacation.setVacation_id(id); // Must set the same id in order to execute a PUT Request, otherwise will create
         int differenceDays = helpers.getDifferenceDays(vacation.getVacation_start(), vacation.getVacation_end());
         vacation.setTotal_days(differenceDays);
+        vacation.setStatus(VacationStatus.PENDING); // when approved by admin if the user wants to make a update again again is set to pending.
         vacationRepository.save(vacation);
         model.addAttribute("vacations",vacationRepository.findAll());
         return "redirect:/vacations/list-vacations";
