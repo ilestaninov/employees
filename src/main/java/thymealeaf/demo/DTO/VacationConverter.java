@@ -13,7 +13,7 @@ public class VacationConverter {
         dto.setId(vacation.getVacation_id());
         dto.setEnd(vacation.getVacation_end());
         dto.setStart(vacation.getVacation_start());
-        dto.setTitle(vacation.getComment());
+        dto.setTitle("Vacation"); //vacation.getComment()
 
         return dto;
     }

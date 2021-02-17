@@ -2,8 +2,11 @@
 /* classes attached to <body> */
 
 .fc-not-allowed,
-.fc-not-allowed .fc-event { /* override events' custom cursors */
+.fc-not-allowed  { /* override events' custom cursors */ //fc-event
   cursor: not-allowed;
+}
+.fc-event { /* override events' custom cursors */
+    cursor: pointer;
 }
 
 .fc-unselectable {

@@ -111,7 +111,7 @@ public class CalendarController {
         vacationRepository.save(vacation);
         return "redirect:/calendar";
     }
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/absence/delete/{id}")
     public String deleteAbsence(@PathVariable("id") Long id, Model model){
         Optional<Absence> absenceToDelete = absenceRepository.findById(id);
         if(!absenceToDelete.isPresent()){

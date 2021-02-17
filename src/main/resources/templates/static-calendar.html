@@ -239,14 +239,24 @@
             ],
             eventClick: function(info) {
                 if(info.event.title === "Vacation"){
-                    alert("VACATION");
-                    fetch("/calendar/vacation/delete/" + info.event.id,{
-                        method:"DELETE"
-                    }).then(function (res) {
-                        //calendar.refetch();
-                        window.location.reload();
-                        console.log(res);
-                    })
+                   if( confirm("Are you sure you want to delete?") === true) {
+                       fetch("/calendar/vacation/delete/" + info.event.id, {
+                           method: "DELETE"
+                       }).then(function (res) {
+                           //calendar.refetch();
+                           window.location.reload();
+                       })
+                   }
+                }
+                if(info.event.title === "Absence"){
+                    if( confirm("Are you sure you want to delete?") === true) {
+                        fetch("/calendar/absence/delete/" + info.event.id, {
+                            method: "DELETE"
+                        }).then(function (res) {
+                            //calendar.refetch();
+                            window.location.reload();
+                        })
+                    }
                 }
             }
 

@@ -13,7 +13,7 @@ public class AbsenceConverter {
         dto.setId(absence.getAbsence_id());
         dto.setEnd(absence.getAbsence_end());
         dto.setStart(absence.getAbsence_start());
-        dto.setTitle(absence.getAbsenceType().toString());
+        dto.setTitle("Absence"); //absence.getAbsenceType().toString()
 
         return dto;
     }
