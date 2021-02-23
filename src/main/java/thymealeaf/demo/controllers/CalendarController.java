@@ -7,18 +7,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import thymealeaf.demo.DTO.AbsenceConverter;
-import thymealeaf.demo.DTO.AbsenceDto;
-import thymealeaf.demo.DTO.VacationConverter;
-import thymealeaf.demo.DTO.VacationDto;
+import thymealeaf.demo.DTO.*;
 import thymealeaf.demo.enums.AbsenceType;
 import thymealeaf.demo.helpers.Helpers;
 import thymealeaf.demo.model.Absence;
 import thymealeaf.demo.model.Employee;
+import thymealeaf.demo.model.Project;
 import thymealeaf.demo.model.Vacation;
-import thymealeaf.demo.repository.AbsenceRepository;
-import thymealeaf.demo.repository.EmployeeRepository;
-import thymealeaf.demo.repository.VacationRepository;
+import thymealeaf.demo.repository.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -32,16 +28,27 @@ public class CalendarController {
 
     private VacationRepository vacationRepository;
     private AbsenceRepository absenceRepository;
+    private ProjectRepo projectRepo;
     private VacationConverter vacationConverter;
+    private ProjectConverter projectConverter;
     private AbsenceConverter absenceConverter;
     private EmployeeRepository employeeRepository;
     private Helpers helpers;
+    private ProjectService projectService;
+
+    @GetMapping("newcalendar")
+    public String newCalendar(Model model){
+        return "new-calendar";
+    }
+
+
 
     @GetMapping("")
-    public String returnCalendar(Model model, Absence absence, Vacation vacation){
+    public String returnCalendar(Model model, Absence absence, Vacation vacation,Project project){
         model.addAttribute("absence", absence);
         model.addAttribute("types", AbsenceType.values());
         model.addAttribute("vacation",vacation);
+        model.addAttribute("project", project);
         return "static-calendar";
     }
     @GetMapping("/list-vacations")
@@ -81,6 +88,25 @@ public class CalendarController {
         System.out.println(jsonMsg);
         return jsonMsg;
     }
+    @GetMapping("/list-projects")
+    @ResponseBody // is not working without responsebody (json)
+    public String allProjectsForEmployee(){
+
+        String jsonMsg = null;
+        try {
+            Optional<Employee> employee =   employeeRepository.findById(1L); // employee should be returned from spring sec
+            //List<Project> projects = projectRepo.findAllByWorkOnProjects(employee.get());
+            List<Project> projects = projectService.getAllProjectsByEmployee(employee.get()); //employeeService.findByEmial(username)
+            List<ProjectDto> result = projectConverter.entityToDto(projects);
+            ObjectMapper objectMapper = new ObjectMapper();
+            jsonMsg = objectMapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+            System.out.println("Enter catch");
+            e.printStackTrace();
+        }
+        System.out.println(jsonMsg  + " " + " All projects for employee");
+        return jsonMsg;
+    }
     @PostMapping("add-absence")
     public String addAbsence(Model model, @Valid Absence absence, BindingResult result) throws IOException {
         if(result.hasErrors()){
@@ -88,7 +114,7 @@ public class CalendarController {
             model.addAttribute("types", AbsenceType.values());
             model.addAttribute("absence",absence);
             model.addAttribute("message","Start  date cannot be less than end date");
-            return "redirect:/calendar";
+            return "add-absence"; //redirect:/calendar
         }
         Optional<Employee> employeeById= employeeRepository.findById(1L); //The user will be taken from spring security
         absence.setEmployee(employeeById.get()); // Set the object to the many-to-one
@@ -109,6 +135,14 @@ public class CalendarController {
         int differenceDays = helpers.getDifferenceDays(vacation.getVacation_start(), vacation.getVacation_end());
         vacation.setTotal_days(differenceDays);
         vacationRepository.save(vacation);
+        return "redirect:/calendar";
+    }
+    @PostMapping("add-project")
+    public String addProject(Model model, Project project, BindingResult result){
+        if(result.hasErrors()){
+            return "calendar";
+        }
+        projectRepo.save(project);
         return "redirect:/calendar";
     }
     @DeleteMapping("/absence/delete/{id}")

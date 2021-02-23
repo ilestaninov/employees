@@ -10,6 +10,7 @@ import thymealeaf.demo.enums.VacationStatus;
 import thymealeaf.demo.validation.DateRange;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -38,7 +39,7 @@ public class Absence {
     private AbsenceType absenceType;
     @Enumerated(EnumType.STRING)
     private VacationStatus status = VacationStatus.PENDING;
-
+    @Size(max = 2)
     private String comment;
 
     @ManyToOne
